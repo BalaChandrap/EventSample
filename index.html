@@ -1,0 +1,104 @@
+<!DoctYPE html>
+<html lang="en">
+
+
+
+<head>
+  
+
+  <script src="http://rawgit.com/ethereum/web3.js/0.16.0/dist/web3.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script>
+    var abi;
+    var MyContract;
+    var myContractInstance;
+    
+ 
+
+
+    window.addEventListener('load', function () {
+
+      // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+      if (typeof web3 !== 'undefined') {
+        // Use Mist/MetaMask's provider
+        web3 = new Web3(web3.currentProvider);
+      } else {
+        console.log('No web3? You should consider trying MetaMask!')
+        // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+        web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/jusRhRm9lPsVCXFLnnNk"));
+      }
+
+      
+      // sumoct contract details
+      abi = [
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "stateAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "claimID",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"name": "patientAddress",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "providerAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "timeStamp",
+				"type": "uint256"
+			}
+		],
+		"name": "ClaimCreated",
+		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "logEvent",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+];
+      MyContract = web3.eth.contract(abi);
+      myContractInstance = MyContract.at('0x475506772b88298610bff7ac73aa16d117d70582');
+      var memberAddress = web3.eth.accounts[0];
+
+
+      myContractInstance.ClaimCreated({
+      }, {
+        fromBlock: 0,
+        toBlock: 'latest'
+      }).get((error, eventResult) => {
+        if (error)
+          console.log('Error in myEvent event handler: ' + error);
+        else {
+          console.log('myEvent created indexed: ' + JSON.stringify(eventResult));
+        }
+      });
+
+
+
+    })
+  </script>
+</head>
+
+
+                       
+
+
+     
+</html>
