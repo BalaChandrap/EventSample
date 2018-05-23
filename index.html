@@ -5,9 +5,11 @@
 
 <head>
   
-
+	<!-- 1. Include web3.js in your app. -->
   <script src="http://rawgit.com/ethereum/web3.js/0.16.0/dist/web3.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>  
+
+
   <script>
     var abi;
     var MyContract;
@@ -17,6 +19,8 @@
 
 
     window.addEventListener('load', function () {
+
+// 2. Createa a new web3 provider and assing the provider (basically to which ethereum node you are connecting to)
 
       // Checking if Web3 has been injected by the browser (Mist/MetaMask)
       if (typeof web3 !== 'undefined') {
@@ -29,7 +33,7 @@
       }
 
       
-      // sumoct contract details
+			// 3. Create a contract object using ABI.
       abi = [
 	{
 		"anonymous": false,
@@ -74,9 +78,13 @@
 	}
 ];
       MyContract = web3.eth.contract(abi);
+
+			// 4. Get the deployed instance of that contract object.
+
       myContractInstance = MyContract.at('0x475506772b88298610bff7ac73aa16d117d70582');
       var memberAddress = web3.eth.accounts[0];
 
+			// 5. Call the events or methods uisng the contract instance.
 
       myContractInstance.ClaimCreated({
       }, {
